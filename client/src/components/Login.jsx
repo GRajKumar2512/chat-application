@@ -1,10 +1,18 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-const Authenticate = () => {
-  const [username, setUsername] = useState("");
+const Login = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleSubmit() {}
+  async function handleSubmit() {
+    const { data } = await axios.post("/login", {
+      email,
+      password,
+    });
+    console.log(data);
+  }
 
   return (
     <div className="bg-green-100 min-h-screen flex flex-col justify-center items-center">
@@ -13,8 +21,8 @@ const Authenticate = () => {
         <input
           className="w-full block outline-none rounded-md mb-2 py-1 px-2"
           placeholder="username"
-          value={username}
-          onChange={(ev) => setUsername(ev.target.value)}
+          value={email}
+          onChange={(ev) => setEmail(ev.target.value)}
         />
         <input
           className="w-full block outline-none rounded-md mb-2 py-1 px-2"
@@ -26,11 +34,17 @@ const Authenticate = () => {
           type="submit"
           className="w-full py-1 px-2 bg-green-500 rounded-md shadow-md shadow-green-700 text-white"
         >
-          Register
+          Login
         </button>
+        <div className="mt-2 text-center">
+          Don't have an account?{" "}
+          <Link to={"/register"} className="text-green-700">
+            Register
+          </Link>
+        </div>
       </form>
     </div>
   );
 };
 
-export default Authenticate;
+export default Login;

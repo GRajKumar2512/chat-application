@@ -1,20 +1,25 @@
 import express from "express";
 import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
+    const hashPass = bcrypt.hashSync(password);
+
     const newUser = new User({
       username: username,
-      password: password,
+      email: email,
+      password: hashPass,
     });
 
     await newUser.save();
 
-    return res.json(newUser);
+    jwt.sign({ id: newUser._id });
   } catch (error) {
     return res.json({ error: `${error.message}` });
   }
